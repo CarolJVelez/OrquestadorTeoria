@@ -1,0 +1,42 @@
+CREATE TABLE TR_CHANCE
+(
+  CHANCE_ID                     SERIAL primary key ,
+  TRANSACCION_CANAL_DIG_ID      SERIAL,
+  TRANSACCION_ID                BIGINT,
+  FECHA                         DATE,
+  HORA                          VARCHAR(8),
+  NIT                           VARCHAR(30),
+  SUBPRODUCTO_ID                BIGINT,
+  CIUDAD                        VARCHAR(50),
+  DEPARTAMENTO                  VARCHAR(50),
+  COLABORADOR_ID                INTEGER,
+  TIPO_DOCUMENTO                varchar(4),
+  IDENTIFICACION                varchar(50),
+  CUENTA_CELULAR                VARCHAR(50),
+  USUARIO                       VARCHAR(100),
+  VALOR_TOTAL                   INTEGER,
+  VALOR_IVA                     INTEGER,
+  VALOR_NETO                    INTEGER,
+  ESTADO                        VARCHAR(10),
+  CONSECUTIVO                   VARCHAR(50),
+  FRM                           VARCHAR(50),
+  COD_SEGURIDAD                 VARCHAR(50),
+  LOTERIAS                      VARCHAR(150),
+  VENDEDOR                      VARCHAR(30),
+  LATITUD                       VARCHAR(40),
+  LONGITUD                      VARCHAR(30)  
+);
+
+ALTER TABLE TR_CHANCE
+ADD CONSTRAINT FK_MA_SUBPRODUCTO
+FOREIGN KEY (SUBPRODUCTO_ID)
+REFERENCES MA_SUBPRODUCTO (SUBPROCUTO_ID);
+
+ALTER TABLE TR_CHANCE
+ADD CONSTRAINT FK_MA_COLABORADOR
+FOREIGN KEY (COLABORADOR_ID)
+REFERENCES MA_COLABORADOR(COLABORADOR_ID);
+
+CREATE SEQUENCE SEQ_TRANSACCION_CANAL_DIGITAL START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE SEQ_TRANSACCION_ID START WITH 1 INCREMENT BY 1;
+CREATE INDEX IDX_TR_CHANCE_01 on TR_CHANCE (TRANSACCION_CANAL_DIG_ID);

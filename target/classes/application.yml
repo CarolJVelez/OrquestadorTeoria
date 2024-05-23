@@ -1,0 +1,125 @@
+spring:
+  zipkin:
+    enabled: false
+  sleuth:
+    enabled: false
+  application:
+    name: ms-common-orchestrate-sg
+    jwtSecret: asdasdasdASKUHkAHLhGLKHJhKJGKjhVJHJHjhvjHVJjhvjhvjJYVJvJVJVJhVJHvKVKkJK
+    jwtExpirationInMs: 60000
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${server.port}}}
+        health-check-timeout: 10s
+        health-check-critical-timeout: 1m
+        catalog-services-watch-delay: 10000
+        catalog-services-watch-timeout: 7
+        health-check-interval: 20s
+        heartbeat:
+          enabled: true
+        deregister: false
+        service-name: ms-common-orchestrate
+        enabled: true
+        acl-token:
+  data:
+    rest:
+      detection-strategy: annotated
+server:
+  port: 9024
+  error:
+    include-stacktrace: never
+    include-exception: false
+    whitelabel:
+      enabled: true
+logging:
+  level:
+    org:
+      hibernate:
+        type: info
+      springframework:
+        web: info
+management:
+  endpoints:
+    web:
+      exposure:
+        exclude: ['heapdump']
+        include: health,info,prometheus
+  endpoint:
+    health:
+      enabled: true
+    info:
+      enabled: true
+    prometheus:
+      enabled: true
+    metrics:
+      enabled: true
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: FULL
+car:
+  url:
+---
+spring:
+  config:
+    activate:
+      on-profile: sleuth
+  sleuth:
+    scheduled:
+      enabled: false
+    sampler:
+      probability: 1.0
+    enabled: true
+    messaging:
+      kafka:
+        enabled: true
+    async:
+      enabled: false
+    integration:
+      enabled: false
+    grpc:
+      enabled: false
+---
+spring:
+  config:
+    activate:
+      on-profile: zipkin
+  zipkin:
+    enabled: true
+    sender:
+      type: kafka
+    service:
+      name: ${spring.application.name}
+    encoder: json_v2
+  kafka:
+    bootstrap-servers: "localhost:29092"
+---
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/DB_ORCHESTRATE?currentSchema=digitalsf
+    username: superGiros
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: true
+    generate-ddl: false
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
+        jdbc.lob.non_contextual_creation: true
+        generate_statistics: false
+    open-in-view: false
+  flyway:
+    baseline-on-migrate: true
+    table: digitalsf.schema_history
+    enabled: true
+    outOfOrder: true
+
+
+

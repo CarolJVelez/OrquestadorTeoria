@@ -1,0 +1,7 @@
+CREATE TABLE MA_PRODUCTO
+(
+   PRODUCTO_ID   SERIAL primary key NOT NULL,
+   NOMBRE        VARCHAR(30)        NOT NULL,
+   CODIGO        VARCHAR(3)         NOT NULL,
+   ACTIVO        BOOLEAN            NOT NULL
+ );
